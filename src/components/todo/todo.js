@@ -9,13 +9,14 @@ export default function ToDo() {
   const [completeCount, setCompleteCount] = useState(0);
   const [inCompleteCount, setInCompleteCount] = useState(0);
   const [list, setList] = useState([]);
+  // const [listDelete,setlistDelete]=useState([]);
   useEffect(() => {
     setList([
-      { _id: 1, complete: false, text: 'Clean the Kitchen', difficulty: 3, assignee: 'Person A' },
-      { _id: 2, complete: false, text: 'Do the Laundry', difficulty: 2, assignee: 'Person A' },
-      { _id: 3, complete: false, text: 'Walk the Dog', difficulty: 4, assignee: 'Person B' },
-      { _id: 4, complete: true, text: 'Do Homework', difficulty: 3, assignee: 'Person C' },
-      { _id: 5, complete: false, text: 'Take a Nap', difficulty: 1, assignee: 'Person B' },
+      { _id: 1, complete: false, text: 'Clean the Kitchen', difficulty: 3, assignee: 'Person A',dueDate:`${new Date().toISOString().split('T')[0]}` },
+      { _id: 2, complete: false, text: 'Do the Laundry', difficulty: 2, assignee: 'Person A' ,dueDate:`${new Date().toISOString().split('T')[0]}`},
+      { _id: 3, complete: false, text: 'Walk the Dog', difficulty: 4, assignee: 'Person B' ,dueDate:`${new Date().toISOString().split('T')[0]}`},
+      { _id: 4, complete: true, text: 'Do Homework', difficulty: 3, assignee: 'Person C' ,dueDate:`${new Date().toISOString().split('T')[0]}`},
+      { _id: 5, complete: false, text: 'Take a Nap', difficulty: 1, assignee: 'Person B' ,dueDate:`${new Date().toISOString().split('T')[0]}`},
     ])
   },[])
   //
@@ -46,6 +47,12 @@ export default function ToDo() {
     setList(temporaryList);
   }
 
+  function handelDelete(id){
+    list.splice(id,1);
+    let temp = [...list];
+    setList(temp)
+  }
+ 
   return (
     <section className='container'>
       <Helmet>
@@ -70,6 +77,7 @@ export default function ToDo() {
           <TodoList
             list={list}
             handleComplete={toggleComplete}
+            handelDelete={handelDelete}
           />
         </div>
       </section>
