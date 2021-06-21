@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 export default withRouter(function Header({ location, history }) {
