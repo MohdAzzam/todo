@@ -5,7 +5,7 @@ import TodoList from './list.js';
 
 import './todo.scss';
 
-export default function ToDo() {
+export default function ToDo({ handleSubmitForm }) {
   const [completeCount, setCompleteCount] = useState(0);
   const [inCompleteCount, setInCompleteCount] = useState(0);
   const [list, setList] = useState([]);
@@ -37,7 +37,7 @@ export default function ToDo() {
   }
 
   function handleAddNewItem(item) {
-    if (list.length >1) {
+    if (list.length > 1) {
       let lastId = parseInt(list[list.length - 1]['_id']);
       item['_id'] = (lastId + 1);
       item['complete'] = false;
@@ -45,7 +45,7 @@ export default function ToDo() {
       temporaryList.push(item);
       setList(temporaryList);
 
-    }else{
+    } else {
       item['_id'] = 1;
       item['complete'] = false;
       let temporaryList = [...list];
@@ -54,6 +54,18 @@ export default function ToDo() {
 
     }
 
+  }
+  function handelUpdate(item, id, itemIndex) {
+    console.log(item, 'item');
+    item['_id'] = id;
+    let temporaryList = [...list];
+    let tempItem = { ...temporaryList[itemIndex] };
+    tempItem.assignee = item.assignee ? item.assignee : tempItem.assignee;
+    tempItem.dueDate = item.dueDate ? item.dueDate : tempItem.dueDate;
+    tempItem.difficulty = item.difficulty ? item.difficulty : tempItem.difficulty;
+    tempItem.text = item.text ? item.text : tempItem.text;
+    temporaryList[itemIndex] = tempItem;
+    setList(temporaryList);
   }
 
   function handelDelete(id) {
@@ -87,6 +99,7 @@ export default function ToDo() {
             list={list}
             handleComplete={toggleComplete}
             handelDelete={handelDelete}
+            handelUpdate={handelUpdate}
           />
         </div>
       </section>
