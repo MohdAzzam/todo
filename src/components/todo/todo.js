@@ -12,13 +12,13 @@ export default function ToDo() {
   // const [listDelete,setlistDelete]=useState([]);
   useEffect(() => {
     setList([
-      { _id: 1, complete: false, text: 'Clean the Kitchen', difficulty: 3, assignee: 'Person A',dueDate:`${new Date().toISOString().split('T')[0]}` },
-      { _id: 2, complete: false, text: 'Do the Laundry', difficulty: 2, assignee: 'Person A' ,dueDate:`${new Date().toISOString().split('T')[0]}`},
-      { _id: 3, complete: false, text: 'Walk the Dog', difficulty: 4, assignee: 'Person B' ,dueDate:`${new Date().toISOString().split('T')[0]}`},
-      { _id: 4, complete: true, text: 'Do Homework', difficulty: 3, assignee: 'Person C' ,dueDate:`${new Date().toISOString().split('T')[0]}`},
-      { _id: 5, complete: false, text: 'Take a Nap', difficulty: 1, assignee: 'Person B' ,dueDate:`${new Date().toISOString().split('T')[0]}`},
+      { _id: 1, complete: false, text: 'Clean the Kitchen', difficulty: 3, assignee: 'Person A', dueDate: `${new Date().toISOString().split('T')[0]}` },
+      { _id: 2, complete: false, text: 'Do the Laundry', difficulty: 2, assignee: 'Person A', dueDate: `${new Date().toISOString().split('T')[0]}` },
+      { _id: 3, complete: false, text: 'Walk the Dog', difficulty: 4, assignee: 'Person B', dueDate: `${new Date().toISOString().split('T')[0]}` },
+      { _id: 4, complete: true, text: 'Do Homework', difficulty: 3, assignee: 'Person C', dueDate: `${new Date().toISOString().split('T')[0]}` },
+      { _id: 5, complete: false, text: 'Take a Nap', difficulty: 1, assignee: 'Person B', dueDate: `${new Date().toISOString().split('T')[0]}` },
     ])
-  },[])
+  }, [])
   //
   useEffect(() => {
     let tempCompleteCount = list.filter(i => i.complete).length;
@@ -37,22 +37,31 @@ export default function ToDo() {
   }
 
   function handleAddNewItem(item) {
-    let lastId = parseInt(list[list.length - 1]['_id']);
-    item['_id'] = (lastId + 1);
-    item['complete'] = false;
+    if (list.length >1) {
+      let lastId = parseInt(list[list.length - 1]['_id']);
+      item['_id'] = (lastId + 1);
+      item['complete'] = false;
+      let temporaryList = [...list];
+      temporaryList.push(item);
+      setList(temporaryList);
 
-    let temporaryList = [...list];
-    temporaryList.push(item);
+    }else{
+      item['_id'] = 1;
+      item['complete'] = false;
+      let temporaryList = [...list];
+      temporaryList.push(item);
+      setList(temporaryList);
 
-    setList(temporaryList);
+    }
+
   }
 
-  function handelDelete(id){
-    list.splice(id,1);
+  function handelDelete(id) {
+    list.splice(id, 1);
     let temp = [...list];
     setList(temp)
   }
- 
+
   return (
     <section className='container'>
       <Helmet>
@@ -63,14 +72,14 @@ export default function ToDo() {
 
       <header className='bg-dark mt-4 p-3'>
         <h2 className='text-light'>
-          There are {completeCount} Items To Complete
+          There are {inCompleteCount} Items To Complete
         </h2>
       </header>
 
       <section className="todo d-flex">
 
         <div className='col-4 card mr-4 p-4'>
-          <TodoForm  handleAddNewItem={handleAddNewItem} />
+          <TodoForm handleAddNewItem={handleAddNewItem} />
         </div>
 
         <div className='col-6 card ml-4 p-0'>
