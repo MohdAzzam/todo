@@ -13,19 +13,17 @@ export default function TodoForm({ handleAddNewItem }) {
     difficulty: Yup.string()
       .required('difficulty is required'),
     assignee: Yup.string().required('You should assign a task to one'),
-    dueDate:Yup.string().required('You should pic up a date to finish the task')
+    dueDate: Yup.string().required('You should pic up a date to finish the task')
   });
 
   //Form hooks
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
     resolver: yupResolver(validation),
     defaultValues: {
       difficulty: '1'
     }
   });
-  
 
-  
   useEffect(() => {
     register('text');
     register('difficulty');
@@ -34,13 +32,14 @@ export default function TodoForm({ handleAddNewItem }) {
 
   })
 
-  function onSubmit(form) {
-    handleAddNewItem(form); 
+  function onSubmit(form,e) {
+    handleAddNewItem(form);
+    e.target.reset();
   }
   return (
     <>
       <h3>Add Item</h3>
-      <form >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <label>
           <span>To Do Item</span>
           <input
@@ -63,7 +62,7 @@ export default function TodoForm({ handleAddNewItem }) {
 
         <label>
           <span>Assigned To</span>
-          <input type="text" name="assignee"   placeholder="Assigned To" onChange={(e) => setValue('assignee', e.target.value)}  />
+          <input type="text" name="assignee" placeholder="Assigned To" onChange={(e) => setValue('assignee', e.target.value)} />
         </label>
         {
           !!errors?.assignee?.message &&
@@ -71,14 +70,14 @@ export default function TodoForm({ handleAddNewItem }) {
             {errors?.assignee?.message}
           </label>
         }
-        <input className='mt-2 mb-4' type='date' name='dueDate' onChange={(e)=>setValue('dueDate',e.target.value)} />
+        <input className='mt-2 mb-4' type='date' name='dueDate' onChange={(e) => setValue('dueDate', e.target.value)} />
         {
           !!errors?.dueDate?.message &&
           <label>
             {errors?.dueDate?.message}
           </label>
         }
-        <button onClick={handleSubmit(onSubmit)} className='btn btn-primary'  >Add Item</button>
+        <button  className='btn btn-primary'  >Add Item</button>
       </form>
     </>
   );
