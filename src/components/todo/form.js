@@ -17,7 +17,7 @@ export default function TodoForm({ handleAddNewItem }) {
   });
 
   //Form hooks
-  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit,  setValue, formState: { errors } } = useForm({
     resolver: yupResolver(validation),
     defaultValues: {
       difficulty: '1'
@@ -33,6 +33,7 @@ export default function TodoForm({ handleAddNewItem }) {
   })
 
   function onSubmit(form,e) {
+    if(e.target.text.value !== '')
     handleAddNewItem(form);
     e.target.reset();
   }
