@@ -1,0 +1,49 @@
+import useAjax from "./useAjax";
+import { commonHeaders } from "./HelperMethods";
+
+export const TodoHelper = {
+    /**
+     * List todo itmes
+     * 
+     * @returns 
+     */
+    list: () => {
+        return useAjax.get("/", {
+            headers: commonHeaders()
+        });
+    },
+    /**
+     * Handle add new item
+     * 
+     * @param {Object} form 
+     * @returns 
+     */
+    add: (form) => {
+        return useAjax.post('/', form, {
+            headers: commonHeaders()
+        });
+    },
+    /**
+     * Handle update todo item
+     * 
+     * @param {string} id 
+     * @param {Object} form 
+     * @returns 
+     */
+    update: (id, form) => {
+        return useAjax.put(`/${id}`, form, {
+            headers: commonHeaders()
+        })
+    },
+    /**
+     * Handle delete todo item
+     * 
+     * @param {string} id 
+     * @returns 
+     */
+    delete: (id) => {
+        return useAjax.delete(`/${id}`, {
+            headers: commonHeaders()
+        });
+    }
+}

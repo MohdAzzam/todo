@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import TodoForm from './form.js';
 import TodoList from './list.js';
-
 import './todo.scss';
 
-export default function ToDo({ handleSubmitForm }) {
+
+export default function ToDo({ handleSubmitForm  }) {
   const [completeCount, setCompleteCount] = useState(0);
   const [inCompleteCount, setInCompleteCount] = useState(0);
   const [list, setList] = useState([]);
@@ -56,7 +56,8 @@ export default function ToDo({ handleSubmitForm }) {
 
   }
   function handelUpdate(item, id, itemIndex) {
-    console.log(item, 'item');
+    console.log(item,id,itemIndex );
+    // console.log(item, 'item');
     item['_id'] = id;
     let temporaryList = [...list];
     let tempItem = { ...temporaryList[itemIndex] };
@@ -69,6 +70,7 @@ export default function ToDo({ handleSubmitForm }) {
   }
 
   function handelDelete(id) {
+    console.log(list);
     list.splice(id, 1);
     let temp = [...list];
     setList(temp)
@@ -90,16 +92,17 @@ export default function ToDo({ handleSubmitForm }) {
 
       <section className="todo d-flex">
 
-        <div className='col-4 card mr-4 p-4'>
+        <div className='col-4  mr-4 p-4'>
           <TodoForm handleAddNewItem={handleAddNewItem} />
         </div>
 
-        <div className='col-6 card ml-4 p-0'>
+        <div className='col-6  ml-4 p-0'>
           <TodoList
             list={list}
             handleComplete={toggleComplete}
             handelDelete={handelDelete}
             handelUpdate={handelUpdate}
+
           />
         </div>
       </section>
