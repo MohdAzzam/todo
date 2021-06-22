@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge, Toast } from 'react-bootstrap';
 import UpdateTodoModal from "./UpdateTodoModal";
-import './todo.scss';
+
 
 export default function TodoList({
-  list,
+  baseList,
+  listCount,
+  numberOfItemsPerScreen,
   handleComplete,
   handelDelete,
   handelUpdate
@@ -12,15 +14,34 @@ export default function TodoList({
   const [modalUpdate, setModalUpdate] = useState({
     show: false
   });
+  const [pageNumber, setPageNumber] = useState(1);
+  const [list, setList] = useState([]);
+  const [enableNextPage, setEnableNextPage] = useState(false);
+  const [enablePrevious, setEnablePrevious] = useState(false);
+
+  useEffect(() => {
+    if (listCount > numberOfItemsPerScreen) {
+      let offset = (pageNumber - 1) * numberOfItemsPerScreen;
+      let tempList = [...baseList];
+      tempList = tempList.slice(offset, numberOfItemsPerScreen + offset);
+      setList(tempList)
+      setEnableNextPage(baseList.length > (pageNumber * numberOfItemsPerScreen));
+      return;
+    }
+    setList(baseList)
+  }, [listCount, baseList, pageNumber, numberOfItemsPerScreen])
+
+  useEffect(() => {
+    setEnablePrevious(pageNumber > 1);
+  }, [pageNumber])
+
 
   function handleUpdateItem(item, itemId, itemIndex) {
     handleCloseUpdateModal();
     handelUpdate(itemId, item);
-
   }
 
   function handleShowUpdateModal(item, itemIndex) {
-    console.log(item);
     setModalUpdate({
       item: item,
       itemId: item['_id'],
@@ -36,6 +57,14 @@ export default function TodoList({
       e.preventDefault();
     }
     setModalUpdate({});
+  }
+
+  function handleGoNextPage() {
+    setPageNumber(pageNumber + 1);
+  }
+
+  function handleGoPrevious() {
+    setPageNumber(pageNumber - 1);
   }
 
   return (
@@ -72,6 +101,15 @@ export default function TodoList({
           </Toast>
         ))}
       </ul>
+
+      <div className="d-flex mt-3 justify-content-between">
+        {enablePrevious ? (
+          <button className='btn btn-info' onClick={handleGoPrevious}>Previous</button>
+        ) : []}
+        {enableNextPage ? (
+          <button className='btn btn-success' onClick={handleGoNextPage}>Next</button>
+        ) : []}
+      </div>
     </div>
   );
 }

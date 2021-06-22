@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
 import { TodoHelper } from "../../api/TodoHelper";
+import AppContext from "../../context/AppContext";
 
-const ToDo = () => {
-
+export default function Todo() {
+  const { isShowCompletedItem, numberOfItemsPerScreen } = useContext(AppContext.Context);
   const [list, setList] = useState([]);
+  const [listCount, setListCount] = useState(0);
 
   /**
    * When load page need to call api to get todo itms
@@ -13,15 +15,23 @@ const ToDo = () => {
   useEffect(() => {
     TodoHelper.list().then((response) => {
       setList(response.data.results);
+      setListCount(response.data.count);
     })
   }, []);
+
+  /**
+   * When list has been changed need to reset list count
+   */
+  useEffect(() => {
+    setListCount(list.length);
+  }, [list])
 
   /**
    * Handle add new todo item
    * 
    * @param {Object} item 
    */
-  const _addItem = (item) => {
+  const handleAddItem = (item) => {
     TodoHelper.add(item)
       .then((response) => {
         setList([...list, response.data])
@@ -69,35 +79,37 @@ const ToDo = () => {
     TodoHelper.delete(id).then((response) => {
       let temp = [...list];
       temp.splice(itemIndex, 1);
-      setList(temp)
+      setList(temp);
     });
   }
 
   return (
-    <>
-      <header>
-        <h2>
-          There are {list.filter(item => !item.complete).length} Items To Complete
-        </h2>
-      </header>
+    <article>
+      {isShowCompletedItem ? (
+        <header>
+          <h2>
+            There are {list.filter(item => !item.complete).length} Items To Complete
+          </h2>
+        </header>
+      ) : []}
 
       <section className="todo">
 
         <div>
-          <TodoForm handleAddNewItem={_addItem} />
+          <TodoForm handleAddNewItem={handleAddItem} />
         </div>
 
         <div>
           <TodoList
-            list={list}
+            baseList={list}
+            listCount={listCount}
+            numberOfItemsPerScreen={numberOfItemsPerScreen}
             handleComplete={handleToggleComplete}
             handelDelete={handelDelete}
             handelUpdate={handelUpdate}
           />
         </div>
       </section>
-    </>
+    </article>
   );
-};
-
-export default ToDo;
+}
