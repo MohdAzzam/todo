@@ -5,9 +5,9 @@ import { TodoHelper } from "../../api/TodoHelper";
 import AppContext from "../../context/AppContext";
 
 export default function Todo() {
-  const { isShowCompletedItem,numberOfItemsPerScreen } = useContext(AppContext.Context);
+  const { isShowCompletedItem, numberOfItemsPerScreen } = useContext(AppContext.Context);
   const [list, setList] = useState([]);
-  const [listCount,setListCount] = useState(0);
+  const [listCount, setListCount] = useState(0);
 
   /**
    * When load page need to call api to get todo itms
@@ -18,6 +18,13 @@ export default function Todo() {
       setListCount(response.data.count);
     })
   }, []);
+
+  /**
+   * When list has been changed need to reset list count
+   */
+  useEffect(() => {
+    setListCount(list.length);
+  }, [list])
 
   /**
    * Handle add new todo item
@@ -72,7 +79,7 @@ export default function Todo() {
     TodoHelper.delete(id).then((response) => {
       let temp = [...list];
       temp.splice(itemIndex, 1);
-      setList(temp)
+      setList(temp);
     });
   }
 

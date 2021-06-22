@@ -102,12 +102,12 @@ export default function TodoList({
         ))}
       </ul>
 
-      <div className="d-flex justify-content-between">
+      <div className="d-flex mt-3 justify-content-between">
         {enablePrevious ? (
-          <button onClick={handleGoPrevious}>Previous</button>
+          <button className='btn btn-info' onClick={handleGoPrevious}>Previous</button>
         ) : []}
         {enableNextPage ? (
-          <button onClick={handleGoNextPage}>Next</button>
+          <button className='btn btn-success' onClick={handleGoNextPage}>Next</button>
         ) : []}
       </div>
     </div>
