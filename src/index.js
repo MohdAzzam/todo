@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './app.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.scss';
 class Main extends React.Component {
   render() {

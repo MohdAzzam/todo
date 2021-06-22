@@ -9,9 +9,9 @@ export default function UpdateTodoModal({ item, itemId, itemIndex, show, handelC
         setSelectedItem(item);
     }, [item])
 
-    const { register, handleSubmit, watch,setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-    const model = watch();
+
 
     useEffect(() => {
         register('text');
@@ -25,6 +25,7 @@ export default function UpdateTodoModal({ item, itemId, itemIndex, show, handelC
         setSelectedItem({});
     }
 
+
     return (
         <Modal show={show} onHide={handelClose}>
             <Modal.Header closeButton>
@@ -34,13 +35,13 @@ export default function UpdateTodoModal({ item, itemId, itemIndex, show, handelC
                 <form>
                     <label>To Do</label>
 
-                    <input onChange={(e) => setValue('text', e.target.value  )} name='text' defaultValue={selectedItem?.text} />
+                    <input onChange={(e) => setValue('text', e.target.value)} name='text' defaultValue={selectedItem?.text} />
 
                     <label>Range</label>
 
                     <input type="range" min="1" max="5"
                         onChange={(e) => setValue('difficulty', e.target.value)}
-                        defaultValue={parseInt(selectedItem?.difficulty)} name='difficulty' />
+                        defaultValue={selectedItem && selectedItem.difficulty ? selectedItem.difficulty : 5} name='difficulty' />
 
                     <label>Assign To </label>
                     <input defaultValue={selectedItem?.assignee}
@@ -57,6 +58,7 @@ export default function UpdateTodoModal({ item, itemId, itemIndex, show, handelC
                     <button variant="primary" onClick={handleSubmit(handleSubmitForm)} >
                         Save Changes
                     </button>
+
                 </form>
             </Modal.Body>
         </Modal >
