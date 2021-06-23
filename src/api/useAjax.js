@@ -5,12 +5,11 @@
 
  import axios from 'axios';
 
-
  /**
   * declare the instance.
   */
  const instance = axios.create({
-     baseURL: "https://api-js401.herokuapp.com/api/v1/todo",
+     baseURL: "https://api-js401.herokuapp.com/",
      params: {},
  });
  

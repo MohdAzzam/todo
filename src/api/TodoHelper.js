@@ -8,7 +8,7 @@ export const TodoHelper = {
      * @returns 
      */
     list: () => {
-        return useAjax.get("/", {
+        return useAjax.get("api/v1/todo", {
             headers: commonHeaders()
         });
     },
@@ -19,7 +19,7 @@ export const TodoHelper = {
      * @returns 
      */
     add: (form) => {
-        return useAjax.post('/', form, {
+        return useAjax.post('api/v1/todo', form, {
             headers: commonHeaders()
         });
     },
@@ -31,7 +31,7 @@ export const TodoHelper = {
      * @returns 
      */
     update: (id, form) => {
-        return useAjax.put(`/${id}`, form, {
+        return useAjax.put(`api/v1/todo/${id}`, form, {
             headers: commonHeaders()
         })
     },
@@ -42,7 +42,7 @@ export const TodoHelper = {
      * @returns 
      */
     delete: (id) => {
-        return useAjax.delete(`/${id}`, {
+        return useAjax.delete(`api/v1/todo/${id}`, {
             headers: commonHeaders()
         });
     }
