@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Badge, Toast } from 'react-bootstrap';
 import UpdateTodoModal from "./UpdateTodoModal";
-
+import UserRoles from "../User/UserRoles";
+import Auth from '../../context/Auth';
 
 export default function TodoList({
   baseList,
@@ -11,6 +12,7 @@ export default function TodoList({
   handelDelete,
   handelUpdate
 }) {
+  const { userIsCan } = useContext(Auth.Context);
   const [modalUpdate, setModalUpdate] = useState({
     show: false
   });
@@ -69,16 +71,22 @@ export default function TodoList({
 
   return (
     <div className='text-center'>
+
+
       <UpdateTodoModal {...modalUpdate} />
       <ul className='list-group todo-list'>
         {list.map((item, index) => (
-          <Toast onClose={() => handelDelete(item._id, index)} key={item._id}>
-            <Toast.Header>
-              <div className="col-3">
-                <Badge pill variant={item.complete ? "success" : "danger"} onClick={() => handleComplete(item._id, item.complete)}>
-                  {item.complete ? "Complete" : "pending"}
-                </Badge>{' '}
-              </div>
+          <Toast className={userIsCan(UserRoles.DELETE) ? '' : 'hide-delete'} onClose={() => handelDelete(item._id, index)} key={item._id}>
+            <Toast.Header >
+              
+              {userIsCan(UserRoles.UPDATE) ? (
+                <div className="col-3">
+                  <Badge pill variant={item.complete ? "success" : "danger"} onClick={() => handleComplete(item._id, item.complete)}>
+                    {item.complete ? "Complete" : "pending"}
+                  </Badge>{' '}
+                </div>
+              ) : []}
+
               <div className="col-4">
                 <strong >{item.assignee}</strong>
               </div>
@@ -92,15 +100,19 @@ export default function TodoList({
                 <p >Difficulty : {item.difficulty}</p>
               </div>
               {/* <input type='submit' onClick={() => handelDelete(index)} className='btn btn-danger mr-4  w-25 mt-2 mb-4' value='Delete' /> */}
-              <div className="d-flex justify-content-end">
-                <input type='submit'
-                  className='btn btn-warning  w-25 mt-2 mb-4' value='Update'
-                  onClick={() => { handleShowUpdateModal(item, index) }} />
-              </div>
+              {userIsCan(UserRoles.UPDATE) ? (
+                <div className="d-flex justify-content-end">
+                  <input type='submit'
+                    className='btn btn-warning  w-25 mt-2 mb-4' value='Update'
+                    onClick={() => { handleShowUpdateModal(item, index) }} />
+                </div>
+
+              ) : []}
             </Toast.Body>
           </Toast>
         ))}
       </ul>
+
 
       <div className="d-flex mt-3 justify-content-between">
         {enablePrevious ? (

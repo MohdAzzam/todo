@@ -86,9 +86,15 @@ html {
 }
 
 .todo-list {
+    .hide-delete {
+        .close {
+            display: none;
+        }
+    }
     .toast {
+        min-width: 18rem;
         max-height: 12rem;
-        .toast-body{
+        .toast-body {
             padding: 1.5rem;
         }
     }
